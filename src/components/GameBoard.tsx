@@ -3,10 +3,11 @@ import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Volume2, VolumeX, RotateCcw, Home } from 'lucide-react';
-import { GameMode, Player, Question } from '@/types/game';
+import { GameMode, Player, Question, QuestionType } from '@/types/game';
 import PlayerDisplay from '@/components/PlayerDisplay';
 import QuestionCard from '@/components/QuestionCard';
 import SpinnerWheel from '@/components/SpinnerWheel';
+import TruthDareSelector from '@/components/TruthDareSelector';
 import { gameQuestions } from '@/data/questions';
 
 interface GameBoardProps {
@@ -20,7 +21,7 @@ const GameBoard = ({ mode, players, onBackToMenu }: GameBoardProps) => {
   const [currentQuestion, setCurrentQuestion] = useState<Question | null>(null);
   const [isSpinning, setIsSpinning] = useState(false);
   const [voiceEnabled, setVoiceEnabled] = useState(true);
-  const [gameState, setGameState] = useState<'spinning' | 'question' | 'waiting'>('waiting');
+  const [gameState, setGameState] = useState<'spinning' | 'selecting' | 'question' | 'waiting'>('waiting');
 
   const currentPlayer = players[currentPlayerIndex];
   const modeQuestions = gameQuestions.filter(q => q.mode.includes(mode));
@@ -40,15 +41,37 @@ const GameBoard = ({ mode, players, onBackToMenu }: GameBoardProps) => {
     
     // Simulate spinning delay
     setTimeout(() => {
+      setIsSpinning(false);
+      setGameState('selecting');
+      
+      // Speak the selection prompt
+      const selectionText = `${currentPlayer.name}, the wheel has stopped! Now choose: Truth or Dare?`;
+      speakText(selectionText);
+    }, 3000);
+  };
+
+  const handleTruthDareSelection = (selectedType: QuestionType) => {
+    // Filter questions by the selected type
+    const filteredQuestions = modeQuestions.filter(q => q.type === selectedType);
+    
+    if (filteredQuestions.length === 0) {
+      // Fallback to any question if none found for the selected type
       const randomQuestion = modeQuestions[Math.floor(Math.random() * modeQuestions.length)];
       setCurrentQuestion(randomQuestion);
-      setIsSpinning(false);
-      setGameState('question');
-      
-      // Speak the question
-      const questionText = `${currentPlayer.name}, ${randomQuestion.type}. ${randomQuestion.text}`;
-      speakText(questionText);
-    }, 3000);
+    } else {
+      const randomQuestion = filteredQuestions[Math.floor(Math.random() * filteredQuestions.length)];
+      setCurrentQuestion(randomQuestion);
+    }
+    
+    setGameState('question');
+    
+    // Speak the question after a short delay
+    setTimeout(() => {
+      if (currentQuestion) {
+        const questionText = `${currentPlayer.name}, ${selectedType}. ${currentQuestion.text}`;
+        speakText(questionText);
+      }
+    }, 500);
   };
 
   const nextPlayer = () => {
@@ -140,6 +163,13 @@ const GameBoard = ({ mode, players, onBackToMenu }: GameBoardProps) => {
                   </div>
                 </CardContent>
               </Card>
+            )}
+
+            {gameState === 'selecting' && (
+              <TruthDareSelector 
+                player={currentPlayer}
+                onSelection={handleTruthDareSelection}
+              />
             )}
 
             {gameState === 'question' && currentQuestion && (
