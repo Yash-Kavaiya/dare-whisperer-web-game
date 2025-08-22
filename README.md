@@ -1,6 +1,6 @@
 # 🎮 Truth or Dare Web Game
 
-<div align="center">
+https://truth-and-dare.lovable.app/
   
 ![Truth or Dare](https://img.shields.io/badge/Game-Truth%20or%20Dare-ff69b4?style=for-the-badge)
 ![React](https://img.shields.io/badge/React-18.3.1-61dafb?style=for-the-badge&logo=react)
