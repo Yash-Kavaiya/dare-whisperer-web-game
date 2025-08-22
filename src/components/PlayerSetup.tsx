@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -52,7 +51,7 @@ const PlayerSetup = ({ mode, onPlayersReady, onBack }: PlayerSetupProps) => {
   const isValidToStart = players.filter(p => p.name.trim()).length >= 2;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-600 via-pink-500 to-red-500 p-4">
+    <div className="flex-1 bg-gradient-to-br from-purple-600 via-pink-500 to-red-500 p-4">
       <div className="max-w-4xl mx-auto">
         <div className="flex items-center mb-8">
           <Button
