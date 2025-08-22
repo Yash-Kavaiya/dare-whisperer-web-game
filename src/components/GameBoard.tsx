@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Volume2, VolumeX, RotateCcw, Home } from 'lucide-react';
+import { Volume2, VolumeX, RotateCcw, Home, Sparkles, PartyPopper, Trophy } from 'lucide-react';
 import { GameMode, Player, Question, QuestionType } from '@/types/game';
 import PlayerDisplay from '@/components/PlayerDisplay';
 import QuestionCard from '@/components/QuestionCard';
@@ -20,9 +20,10 @@ const GameBoard = ({ mode, players, onBackToMenu }: GameBoardProps) => {
   const [currentQuestion, setCurrentQuestion] = useState<Question | null>(null);
   const [isSpinning, setIsSpinning] = useState(false);
   const [voiceEnabled, setVoiceEnabled] = useState(true);
-  const [gameState, setGameState] = useState<'spinning' | 'selecting' | 'question' | 'waiting'>('waiting');
+  const [gameState, setGameState] = useState<'spinning' | 'selecting' | 'question' | 'waiting' | 'celebrating'>('waiting');
   const [usedPlayerIndices, setUsedPlayerIndices] = useState<number[]>([]);
   const [usedQuestions, setUsedQuestions] = useState<string[]>([]);
+  const [showCelebration, setShowCelebration] = useState(false);
 
   const currentPlayer = players[currentPlayerIndex];
   const modeQuestions = gameQuestions.filter(q => q.mode.includes(mode));
@@ -67,6 +68,7 @@ const GameBoard = ({ mode, players, onBackToMenu }: GameBoardProps) => {
   const spinWheel = () => {
     setIsSpinning(true);
     setGameState('spinning');
+    setShowCelebration(false);
     
     // Get random next player
     const nextPlayerIndex = getRandomPlayerIndex();
@@ -76,12 +78,22 @@ const GameBoard = ({ mode, players, onBackToMenu }: GameBoardProps) => {
       setIsSpinning(false);
       setCurrentPlayerIndex(nextPlayerIndex);
       setUsedPlayerIndices([...usedPlayerIndices, nextPlayerIndex]);
-      setGameState('selecting');
+      setGameState('celebrating');
+      setShowCelebration(true);
       
-      // Speak the selection prompt
-      const selectedPlayer = players[nextPlayerIndex];
-      const selectionText = `${selectedPlayer.name}, the wheel has chosen you! Now choose: Truth or Dare?`;
-      speakText(selectionText);
+      // Play celebration sound if voice is enabled
+      if (voiceEnabled) {
+        const celebrationText = `Congratulations ${players[nextPlayerIndex].name}! You have been chosen!`;
+        speakText(celebrationText);
+      }
+      
+      // After celebration, move to selection
+      setTimeout(() => {
+        setShowCelebration(false);
+        setGameState('selecting');
+        const selectionText = `Now ${players[nextPlayerIndex].name}, make your choice: Truth or Dare?`;
+        speakText(selectionText);
+      }, 3000);
     }, 3000);
   };
 
@@ -153,8 +165,88 @@ const GameBoard = ({ mode, players, onBackToMenu }: GameBoardProps) => {
     setUsedPlayerIndices([randomStartIndex]);
   }, []);
 
+  // Confetti component
+  const Confetti = () => (
+    <>
+      {[...Array(20)].map((_, i) => (
+        <div
+          key={i}
+          className="absolute animate-confetti"
+          style={{
+            left: `${Math.random() * 100}%`,
+            animationDelay: `${Math.random() * 1}s`,
+            animationDuration: `${2 + Math.random() * 1}s`,
+          }}
+        >
+          <div 
+            className="w-2 h-2 rounded-full"
+            style={{
+              backgroundColor: ['#FFD700', '#FF69B4', '#00CED1', '#FF6347', '#98FB98', '#DDA0DD'][Math.floor(Math.random() * 6)]
+            }}
+          />
+        </div>
+      ))}
+    </>
+  );
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-600 via-pink-500 to-red-500 p-4">
+      <style jsx>{`
+        @keyframes confetti {
+          0% {
+            transform: translateY(-100vh) rotate(0deg);
+            opacity: 1;
+          }
+          100% {
+            transform: translateY(100vh) rotate(720deg);
+            opacity: 0;
+          }
+        }
+        
+        @keyframes bounce-scale {
+          0%, 100% {
+            transform: scale(1);
+          }
+          50% {
+            transform: scale(1.2);
+          }
+        }
+        
+        @keyframes glow {
+          0%, 100% {
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+          }
+          50% {
+            box-shadow: 0 0 40px rgba(255, 255, 255, 0.8);
+          }
+        }
+        
+        @keyframes float {
+          0%, 100% {
+            transform: translateY(0px);
+          }
+          50% {
+            transform: translateY(-20px);
+          }
+        }
+        
+        .animate-confetti {
+          animation: confetti linear;
+        }
+        
+        .animate-bounce-scale {
+          animation: bounce-scale 0.6s ease-in-out;
+        }
+        
+        .animate-glow {
+          animation: glow 2s ease-in-out infinite;
+        }
+        
+        .animate-float {
+          animation: float 3s ease-in-out infinite;
+        }
+      `}</style>
+      
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="flex justify-between items-center mb-8">
@@ -197,7 +289,14 @@ const GameBoard = ({ mode, players, onBackToMenu }: GameBoardProps) => {
           </div>
 
           {/* Question/Action Area */}
-          <div className="space-y-6">
+          <div className="space-y-6 relative">
+            {/* Confetti overlay */}
+            {showCelebration && (
+              <div className="fixed inset-0 pointer-events-none z-50">
+                <Confetti />
+              </div>
+            )}
+
             {gameState === 'waiting' && (
               <Card className="bg-white/10 backdrop-blur-md border-white/20">
                 <CardHeader>
@@ -227,6 +326,37 @@ const GameBoard = ({ mode, players, onBackToMenu }: GameBoardProps) => {
                   <p className="text-white/70 mt-4">
                     Who will be chosen next?
                   </p>
+                </CardContent>
+              </Card>
+            )}
+
+            {gameState === 'celebrating' && (
+              <Card className="bg-gradient-to-r from-yellow-400 via-pink-500 to-purple-600 border-2 border-white animate-bounce-scale animate-glow">
+                <CardHeader className="text-center">
+                  <div className="flex justify-center space-x-2 mb-4">
+                    <Sparkles className="w-8 h-8 text-yellow-300 animate-pulse" />
+                    <Trophy className="w-10 h-10 text-yellow-300 animate-float" />
+                    <Sparkles className="w-8 h-8 text-yellow-300 animate-pulse" />
+                  </div>
+                  <CardTitle className="text-white text-4xl font-bold animate-pulse">
+                    🎉 WINNER! 🎉
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="text-center">
+                  <div className="text-8xl mb-4 animate-bounce">
+                    {currentPlayer.avatar}
+                  </div>
+                  <h2 className="text-5xl font-bold text-white mb-2 animate-pulse">
+                    {currentPlayer.name}
+                  </h2>
+                  <p className="text-2xl text-yellow-200 animate-bounce">
+                    You've been chosen!
+                  </p>
+                  <div className="flex justify-center space-x-4 mt-4">
+                    <PartyPopper className="w-6 h-6 text-yellow-300 animate-bounce" style={{ animationDelay: '0.1s' }} />
+                    <PartyPopper className="w-6 h-6 text-pink-300 animate-bounce" style={{ animationDelay: '0.2s' }} />
+                    <PartyPopper className="w-6 h-6 text-purple-300 animate-bounce" style={{ animationDelay: '0.3s' }} />
+                  </div>
                 </CardContent>
               </Card>
             )}
