@@ -263,3 +263,5 @@ const GameBoard = ({ mode, players, onBackToMenu }: GameBoardProps) => {
     </div>
   );
 };
+
+export default GameBoard;
