@@ -190,7 +190,7 @@ const GameBoard = ({ mode, players, onBackToMenu }: GameBoardProps) => {
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-600 via-pink-500 to-red-500 p-4">
+    <div className="flex-1 bg-gradient-to-br from-purple-600 via-pink-500 to-red-500 p-4">
       <style jsx>{`
         @keyframes confetti {
           0% {
