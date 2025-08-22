@@ -10,11 +10,8 @@
 
 **The ultimate party game for friends, couples, and family!**
 
-[Live Demo](https://lovable.dev/projects/b87f15f8-35b1-4fe8-a189-4f4455829fed) | [Report Bug](https://github.com/yourusername/truth-or-dare/issues) | [Request Feature](https://github.com/yourusername/truth-or-dare/pulls)
+<img width="1536" height="1024" alt="image" src="https://github.com/user-attachments/assets/0b774c37-185f-444a-b4a4-4db18b2075e6" />
 
-</div>
-
----
 
 ## 📋 Table of Contents
 
@@ -240,21 +237,11 @@ yarn preview
 
 ### Component Communication
 
-```mermaid
-graph LR
-    A[GameBoard] -->|players| B[PlayerDisplay]
-    A -->|isSpinning| C[SpinnerWheel]
-    A -->|player| D[TruthDareSelector]
-    A -->|question| E[QuestionCard]
-    
-    C -->|onSpin| A
-    D -->|onSelection| A
-    E -->|onComplete/onSkip| A
-    
-    style A fill:#f96,stroke:#333,stroke-width:2px
-```
+<img width="1024" height="1536" alt="image" src="https://github.com/user-attachments/assets/326a64b7-79fb-4b33-b4ca-037b2acfab2b" />
+
 
 ### Question Categories
+<img width="1536" height="1024" alt="image" src="https://github.com/user-attachments/assets/e7982148-ab7e-4adb-b423-6317a1a7a248" />
 
 | Category | Description | Example |
 |----------|-------------|---------|
