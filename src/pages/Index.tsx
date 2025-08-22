@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -50,7 +49,7 @@ const Index = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-600 via-pink-500 to-red-500 flex items-center justify-center p-4">
+    <div className="flex-1 bg-gradient-to-br from-purple-600 via-pink-500 to-red-500 flex items-center justify-center p-4">
       <div className="w-full max-w-4xl">
         <div className="text-center mb-8 animate-fade-in">
           <h1 className="text-6xl font-bold text-white mb-4 drop-shadow-lg">
