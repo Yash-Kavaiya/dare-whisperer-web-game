@@ -193,7 +193,7 @@ stateDiagram-v2
 
 1. **Clone the repository**
 ```bash
-git clone https://github.com/yourusername/truth-or-dare-game.git
+https://github.com/Yash-Kavaiya/truth-and-dare-game
 cd truth-or-dare-game
 ```
 
@@ -224,50 +224,6 @@ npm run preview
 # or
 yarn preview
 ```
-
----
-
-## 📁 Project Structure
-
-```
-truth-or-dare-game/
-├── 📂 public/
-│   ├── placeholder.svg
-│   └── robots.txt
-├── 📂 src/
-│   ├── 📂 components/
-│   │   ├── GameBoard.tsx        # Main game board
-│   │   ├── GameModeSelector.tsx # Mode selection cards
-│   │   ├── PlayerDisplay.tsx    # Player status display
-│   │   ├── PlayerSetup.tsx      # Player configuration
-│   │   ├── QuestionCard.tsx     # Question/dare display
-│   │   ├── SpinnerWheel.tsx     # Animated spinner
-│   │   ├── TruthDareSelector.tsx # Truth/dare choice
-│   │   └── 📂 ui/              # Shadcn UI components
-│   ├── 📂 data/
-│   │   └── questions.ts         # Game questions database
-│   ├── 📂 hooks/
-│   │   ├── use-mobile.tsx       # Mobile detection
-│   │   └── use-toast.ts         # Toast notifications
-│   ├── 📂 lib/
-│   │   └── utils.ts             # Utility functions
-│   ├── 📂 pages/
-│   │   ├── Index.tsx            # Main page
-│   │   └── NotFound.tsx         # 404 page
-│   ├── 📂 types/
-│   │   └── game.ts              # TypeScript definitions
-│   ├── App.tsx                  # App root
-│   ├── main.tsx                 # Entry point
-│   └── index.css                # Global styles
-├── .gitignore
-├── package.json
-├── tailwind.config.ts
-├── tsconfig.json
-└── vite.config.ts
-```
-
----
-
 ## 🧩 Components
 
 ### Core Components
@@ -296,42 +252,6 @@ graph LR
     E -->|onComplete/onSkip| A
     
     style A fill:#f96,stroke:#333,stroke-width:2px
-```
-
----
-
-## 📊 Data Models
-
-### TypeScript Interfaces
-
-```typescript
-// Player Model
-interface Player {
-  id: string;
-  name: string;
-  avatar: string;
-  score: number;
-}
-
-// Question Model
-interface Question {
-  id: string;
-  type: 'truth' | 'dare';
-  text: string;
-  category: string;
-  difficulty: 'easy' | 'medium' | 'hard';
-  ageRating: 'PG' | '13+' | '18+';
-  mode: GameMode[];
-}
-
-// Game Settings
-interface GameSettings {
-  voiceEnabled: boolean;
-  timerEnabled: boolean;
-  timerDuration: number;
-  passesAllowed: number;
-  scoringEnabled: boolean;
-}
 ```
 
 ### Question Categories
@@ -380,39 +300,6 @@ interface GameSettings {
 - Keep components small and focused
 - Write meaningful commit messages
 
----
-
-## 🚀 Deployment
-
-### Deployment Options
-
-| Platform | Configuration | Notes |
-|----------|--------------|-------|
-| **Lovable** | Automatic via Git | Primary deployment |
-| **Vercel** | `vercel.json` config | Alternative option |
-| **Netlify** | `netlify.toml` config | Static hosting |
-| **GitHub Pages** | GitHub Actions | Free hosting |
-
-### Build Configuration
-
-```json
-{
-  "scripts": {
-    "build": "vite build",
-    "preview": "vite preview"
-  }
-}
-```
-
-### Performance Optimization
-
-- Lazy loading for routes
-- Code splitting by route
-- Image optimization
-- CSS purging in production
-- Bundle size analysis
-
----
 
 ## 🤝 Contributing
 
@@ -432,13 +319,9 @@ We welcome contributions! Please follow these steps:
 - Follow the existing code style
 - Ensure all tests pass before submitting PR
 
----
-
 ## 📝 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
----
 
 ## 🙏 Acknowledgments
 
@@ -446,15 +329,3 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - [Lucide](https://lucide.dev/) for the icon library
 - [TailwindCSS](https://tailwindcss.com/) for the utility-first CSS framework
 - [Vite](https://vitejs.dev/) for the blazing fast build tool
-
----
-
-## 📧 Contact
-
-Project Link: [https://github.com/yourusername/truth-or-dare-game](https://github.com/yourusername/truth-or-dare-game)
-
----
-
-<div align="center">
-Made with ❤️ by Your Team
-</div>
